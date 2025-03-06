@@ -1,0 +1,18 @@
+.energia{
+    background: url("../../assets/energia.webp");
+    background-size: cover;
+    background-position: center;
+}
+
+.agua{
+    background: url("../../assets/agua.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+
+.energia, .agua{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}

@@ -1,15 +1,13 @@
-# App Chamados
+# App Medição
 
-Aplicativo para cadastro e gestão de chamados de empresas, desenvolvido utilizando Firebase para o backend.
+Aplicativo para cadastro e gestão de mediçoes de energia e agua.
 
 ## Funcionalidades
 
-- Página de Login e Cadastro
-- Cadastro de usuário com email, senha, nome e foto de perfil
+- Página de Login de acesso.
 - Sistema de autenticação de usuário com Firebase Authentication
-- Cadastro e gestão de chamados de empresas
-- Header vertical para navegação
-- Verificação de login para acessar o dashboard
+- Cadastro e gestão de mediçoes de energia e agua
+- Route Private para assegurar a segurança da interface 
 - Redirecionamento para a página de login se o usuário não estiver autenticado
 
 ## Tecnologias Utilizadas
@@ -20,6 +18,7 @@ Aplicativo para cadastro e gestão de chamados de empresas, desenvolvido utiliza
 - Firebase Authentication
 - Firebase Firestore
 - React Toastify
+- Styled Components
 
 ## Instalação
 

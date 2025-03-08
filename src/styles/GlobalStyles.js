@@ -53,13 +53,18 @@ button{
         width: 100% ;
         margin-left: auto;
         box-shadow:rgba(0, 0, 0, 0.29) 0px 10px 29px -1px;
+  
+        
+      
     nav{
         display: flex;
         justify-content: space-between;
         align-items: center;
         height: 70px;
+        margin-left: 200px;
+
         img{
-            margin-left:  200px;
+            cursor: pointer;
         }
     }
 }

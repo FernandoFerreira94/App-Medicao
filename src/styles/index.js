@@ -7,6 +7,7 @@ export const LinkHeader = styled.div`
   height: 100%;
   gap: 20px;
   font-size: 17px;
+  margin-right: 15%;
 `;
 
 export const BtnLeave = styled.button`

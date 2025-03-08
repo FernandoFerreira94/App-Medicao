@@ -9,6 +9,8 @@ import Modal from "../../components/modal";
 
 export default function InfoShop() {
   const [showModal, setShowModal] = useState(false);
+  const [shwoModalEdit, setShowModalEdit] = useState(false);
+  const [buscaId, setBuscaId] = useState("");
 
   const { idShop } = useParams();
   const { getShop, listaEnergia } = useContext(AuthContext);
@@ -18,8 +20,15 @@ export default function InfoShop() {
     getShop(idShop);
   }, [idShop, getShop]);
 
-  function handleShowModal() {
+  function handleShowModal(numeroLoja) {
+    setBuscaId(numeroLoja);
     setShowModal(true);
+  }
+
+  function handleShowModalEdit(numeroLoja) {
+    setBuscaId(numeroLoja);
+    setShowModal(true);
+    setShowModalEdit(true);
   }
 
   return (
@@ -33,7 +42,7 @@ export default function InfoShop() {
               <thead>
                 <tr key="">
                   <th>Loja</th>
-                  <th>Local</th>
+                  <th>Eud</th>
                   <th>Medição</th>
                   <th>Detalhes</th>
                 </tr>
@@ -42,12 +51,18 @@ export default function InfoShop() {
                 {listaEnergia && listaEnergia.length > 0 ? (
                   listaEnergia.map((loja) => (
                     <tr key={loja.id}>
-                      <td>{loja.loja}</td>
-                      <td>{loja.piso}</td>
+                      <td>{loja.nomeLoja}</td>
+                      <td>{loja.numeroLoja}</td>
                       <td>{loja.medicao}</td>
                       <td>
-                        <FaInfoCircle onClick={() => handleShowModal()} />
-                        <FaEdit />
+                        <FaInfoCircle
+                          onClick={() => handleShowModal(loja.numeroLoja)}
+                          color=" rgb(78, 46, 145)"
+                        />
+                        <FaEdit
+                          onClick={() => handleShowModalEdit(loja.numeroLoja)}
+                          color="rgb(239, 48, 109)"
+                        />
                       </td>
                     </tr>
                   ))
@@ -61,7 +76,17 @@ export default function InfoShop() {
           </div>
         </>
       )}
-      {showModal && <Modal close={() => setShowModal(false)} />}
+      {showModal && (
+        <Modal
+          buscaId={buscaId}
+          idShop={idShop}
+          close={() => {
+            setShowModal(false);
+            setShowModalEdit(false);
+          }}
+          modalEdit={shwoModalEdit}
+        />
+      )}
     </>
   );
 }

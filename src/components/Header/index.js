@@ -1,9 +1,9 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/auth";
+
 import logo from "../../assets/logo_colinas.svg";
 import { BtnLeave, LinkHeader } from "../../styles/";
-import "./header.css";
-import { AuthContext } from "../../contexts/auth";
-import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const { signOutUser } = useContext(AuthContext);

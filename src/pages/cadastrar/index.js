@@ -8,6 +8,7 @@ import Title from "../../components/Title";
 import { AuthContext } from "../../contexts/auth";
 
 export default function Cadastrar() {
+  // Hooks do React Hook Form para controle do formulário
   const {
     register,
     handleSubmit,
@@ -15,63 +16,72 @@ export default function Cadastrar() {
     formState: { errors },
   } = useForm();
 
+  // Contexto para integração com AuthContext
   const { setRegister, loading } = useContext(AuthContext);
-  const [show, setShow] = useState("shopping");
-  const msgError = "Campo obrigatorio";
 
+  // Estado para alternar entre "shopping" e "green-tower"
+  const [complexo, setComplexo] = useState("shopping");
+
+  // Estado para mostrar descricao se for selecionado option value "outro"
+  const [showDescricao, setShowDescricao] = useState(false);
+
+  const MSG_ERROR = "Campo obrigatório"; // Mensagem padrão de erro
+
+  /**
+   * Manipula o envio do formulário.
+   * Registra os dados no contexto e reseta o formulário após o envio.
+   * @param {object} data - Dados enviados pelo formulário.
+   */
   async function handleRegister(data) {
     await setRegister(data);
-    reset();
+    reset(); // Reseta os campos do formulário após sucesso
   }
+
   return (
     <>
+      {/* Cabeçalho e título da página */}
       <Header />
       <Title name="Cadastrar Loja" />
+
       <div className="content cadastrar">
+        {/* Formulário de cadastro */}
         <form onSubmit={handleSubmit(handleRegister)}>
+          {/* Seletor de Complexo */}
           <label>
-            Complexo:{" "}
+            Complexo:
             <select
-              {...register("complexo")}
-              onChange={(e) => setShow(e.target.value)}
+              {...register("complexo", { required: MSG_ERROR })}
+              onChange={(e) => setComplexo(e.target.value)}
             >
-              {" "}
-              <option value="shopping" key="shop">
-                Shopping
-              </option>
-              <option value="green-tower" key="greenTower">
-                Green Tower
-              </option>
+              <option value="shopping">Shopping</option>
+              <option value="green-tower">Green Tower</option>
             </select>
             {errors.complexo && (
               <small className="error">{errors.complexo.message}</small>
             )}
           </label>
 
+          {/* Seletor de Tipo */}
           <label>
-            Tipo:{" "}
-            <select {...register("tipo")}>
-              {" "}
-              <option value="energia" key="energia">
-                Energia
-              </option>
-              <option value="agua" key="agua">
-                Agua
-              </option>
+            Tipo:
+            <select {...register("tipo", { required: MSG_ERROR })}>
+              <option value="energia">Energia</option>
+              <option value="agua">Água</option>
             </select>
             {errors.tipo && (
               <small className="error">{errors.tipo.message}</small>
             )}
           </label>
 
-          {show === "shopping" ? (
+          {/* Campos específicos para Shopping */}
+          {complexo === "shopping" ? (
             <>
               <label>
-                Nome loja:{" "}
+                Nome Loja:
                 <input
                   type="text"
-                  placeholder="Digite nome da loja"
-                  {...register("nomeLoja", { required: "Campos Obrigatorio" })}
+                  placeholder="Digite o nome da loja"
+                  {...register("nomeLoja", { required: MSG_ERROR })}
                 />
                 {errors.nomeLoja && (
                   <small className="error">{errors.nomeLoja.message}</small>
@@ -79,23 +89,12 @@ export default function Cadastrar() {
               </label>
 
               <label>
-                Piso:{" "}
-                <select
-                  {...register("piso", { required: "Campos Obrigatorio" })}
-                >
-                  {" "}
-                  <option value="NS" key="NS">
-                    NS
-                  </option>
-                  <option value="NT" key="NT">
-                    NT
-                  </option>
-                  <option value="QS" key="QS">
-                    QS
-                  </option>
-                  <option value="QT" key="QT">
-                    QT
-                  </option>
+                Piso:
+                <select {...register("piso", { required: MSG_ERROR })}>
+                  <option value="NS">NS</option>
+                  <option value="NT">NT</option>
+                  <option value="QS">QS</option>
+                  <option value="QT">QT</option>
                 </select>
                 {errors.piso && (
                   <small className="error">{errors.piso.message}</small>
@@ -103,54 +102,57 @@ export default function Cadastrar() {
               </label>
 
               <label>
-                Numero:{" "}
+                Número:
                 <input
                   type="text"
-                  placeholder="Digite numero da loja"
-                  {...register("numero", { required: "Campos Obrigatorio" })}
+                  placeholder="Digite o número da loja"
+                  {...register("numero", { required: MSG_ERROR })}
                 />
                 {errors.numero && (
                   <small className="error">{errors.numero.message}</small>
                 )}
               </label>
+
               <label>
-                Local Relogio:
+                Local Relógio:
                 <select
-                  {...register("localRelogio", {
-                    required: "Campo Obrigatorio",
-                  })}
+                  {...register("localRelogio", { required: MSG_ERROR })}
+                  onChange={(e) => {
+                    setShowDescricao(e.target.value === "outro");
+                  }}
                 >
-                  <option value="sub-adm" key="sub-adm">
-                    Sub-Adm
-                  </option>
-                  <option value="CM-1" key="CM-1">
-                    CM-1
-                  </option>
-                  <option value="CM-2" key="CM-2">
-                    CM-2
-                  </option>
-                  <option value="shaft-" key="shaft">
-                    Shaft
-                  </option>
-                  <option value="outro-" key="outro">
-                    outro
-                  </option>
-                  {errors.localRelogio && (
-                    <small className="error">
-                      {errors.localRelogio.message}
-                    </small>
-                  )}
+                  <option value="sub-adm">Sub-Adm</option>
+                  <option value="CM-1">CM-1</option>
+                  <option value="CM-2">CM-2</option>
+                  <option value="shaft">Shaft</option>
+                  <option value="outro">Outros</option>
                 </select>
+                {errors.localRelogio && (
+                  <small className="error">{errors.localRelogio.message}</small>
+                )}
               </label>
+              {showDescricao && (
+                <>
+                  <label> Descrição:</label>
+                  <textarea
+                    placeholder="Digite a descrição do local do relogio"
+                    {...register("descricao", { required: MSG_ERROR })}
+                  />
+                  {errors.descricao && (
+                    <small className="error">{errors.descricao.message}</small>
+                  )}
+                </>
+              )}
             </>
           ) : (
+            // Campos específicos para Green Tower
             <>
               <label>
-                Nome da sala:{" "}
+                Nome Sala:
                 <input
                   type="text"
-                  placeholder="Digite nome da sala comercial"
-                  {...register("nomeLoja", { required: "Campos Obrigatorio" })}
+                  placeholder="Digite o nome da sala"
+                  {...register("nomeLoja", { required: MSG_ERROR })}
                 />
                 {errors.nomeLoja && (
                   <small className="error">{errors.nomeLoja.message}</small>
@@ -158,11 +160,11 @@ export default function Cadastrar() {
               </label>
 
               <label>
-                Andar:{" "}
+                Andar:
                 <input
                   type="text"
                   placeholder="Digite o andar"
-                  {...register("andar", { required: "Campo obrigatorio" })}
+                  {...register("andar", { required: MSG_ERROR })}
                 />
                 {errors.andar && (
                   <small className="error">{errors.andar.message}</small>
@@ -170,11 +172,11 @@ export default function Cadastrar() {
               </label>
 
               <label>
-                Numero:{" "}
+                Número:
                 <input
                   type="text"
-                  placeholder="Digite numero da sala comercial"
-                  {...register("numero", { required: "Campos Obrigatorio" })}
+                  placeholder="Digite o número da sala"
+                  {...register("numero", { required: MSG_ERROR })}
                 />
                 {errors.numero && (
                   <small className="error">{errors.numero.message}</small>
@@ -182,13 +184,11 @@ export default function Cadastrar() {
               </label>
 
               <label>
-                Andar relogio:
+                Andar Relógio:
                 <input
                   type="text"
-                  placeholder="Digite o andar do relogio"
-                  {...register("andarRelogio", {
-                    required: "Campos Obrigatorio",
-                  })}
+                  placeholder="Digite o andar do relógio"
+                  {...register("andarRelogio", { required: MSG_ERROR })}
                 />
                 {errors.andarRelogio && (
                   <small className="error">{errors.andarRelogio.message}</small>
@@ -197,12 +197,13 @@ export default function Cadastrar() {
             </>
           )}
 
+          {/* Campos Comuns */}
           <label>
-            N Relogio:
+            Número Relógio:
             <input
               type="text"
-              placeholder="Digite numero do relogio"
-              {...register("relogio", { required: "Campos Obrigatorio" })}
+              placeholder="Digite o número do relógio"
+              {...register("relogio", { required: MSG_ERROR })}
             />
             {errors.relogio && (
               <small className="error">{errors.relogio.message}</small>
@@ -210,17 +211,33 @@ export default function Cadastrar() {
           </label>
 
           <label>
-            Ultima medição:
+            Última Medição:
             <input
               type="number"
-              placeholder="Digite nome da loja"
-              {...register("medicao", { required: "Campos Obrigatorio" })}
+              placeholder="Digite a última medição"
+              {...register("medicao", { required: MSG_ERROR })}
             />
             {errors.medicao && (
               <small className="error">{errors.medicao.message}</small>
             )}
           </label>
-          <input type="submit" value={loading ? "Cadastrando" : "Cadastrar"} />
+
+          <label>
+            Foto:
+            <input
+              type="file"
+              accept="image/*" // Aceita apenas arquivos de imagem
+              capture="environment" // Abre a câmera automaticamente no celular (se suportado)
+              //  {...register("photo")}
+            />
+          </label>
+
+          {/* Botão de Submissão */}
+          <input
+            type="submit"
+            value={loading ? "Cadastrando..." : "Cadastrar"}
+            disabled={loading}
+          />
         </form>
       </div>
     </>

@@ -1,52 +1,59 @@
 import { useState, createContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  getDocs,
-  collection,
-  updateDoc,
-} from "firebase/firestore";
-
+import { doc, getDoc, setDoc, getDocs, collection } from "firebase/firestore";
 import { db, auth } from "../services/firebaseConection.js";
 import { toast } from "react-toastify";
 
+// Criação do contexto de autenticação
 export const AuthContext = createContext({});
 
+/**
+ * Provedor de Autenticação que gerencia estados globais do usuário,
+ * funcionalidade de login, logout e integração com Firebase.
+ */
 function AuthProvider({ children }) {
   const navigate = useNavigate();
 
-  const [listaEnergia, setListaEnergia] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  // Estados globais
+  const [listaEnergia, setListaEnergia] = useState([]); // Dados das lojas
+  const [loading, setLoading] = useState(true); // Controle de carregamento
+  const [user, setUser] = useState(null); // Dados do usuário logado
 
   const dateNow = new Date();
   const formatoDate = dateNow.toLocaleDateString();
 
+  /**
+   * Efeito para carregar o usuário armazenado localmente no início.
+   */
   useEffect(() => {
     async function loadUser() {
       const storageUser = localStorage.getItem("@admin");
 
       if (storageUser) {
-        setUser(JSON.parse(storageUser));
+        setUser(JSON.parse(storageUser)); // Carrega o usuário salvo
       }
-      setLoading(false);
+      setLoading(false); // Finaliza carregamento inicial
     }
 
     loadUser();
   }, []);
 
-  // função de login
+  /**
+   * Função para realizar login.
+   * Autentica o usuário no Firebase Authentication e salva seus dados localmente.
+   * @param {string} email - Email do usuário.
+   * @param {string} password - Senha do usuário.
+   */
   async function signIn(email, password) {
-    setLoading(true);
+    setLoading(true); // Inicia carregamento
     await signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        const { user } = userCredential;
+        const { user } = userCredential; // Dados do usuário autenticado
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
 
+        // Se o usuário não existir no Firestore, cria um novo registro
         if (!docSnap.exists()) {
           await setDoc(doc(db, "users", user.uid), {
             email: user.email,
@@ -58,162 +65,133 @@ function AuthProvider({ children }) {
           email: user.email,
         };
 
-        setUser(userData);
-        localStorage.setItem("@admin", JSON.stringify(userData));
+        setUser(userData); // Salva dados do usuário no estado
+        localStorage.setItem("@admin", JSON.stringify(userData)); // Salva no localStorage
 
         toast.success("Seja bem-vindo");
         setLoading(false);
-        navigate("/home");
+        navigate("/home"); // Redireciona para a página inicial
       })
       .catch((e) => {
-        setLoading(false);
+        setLoading(false); // Finaliza carregamento
         toast.error("Email e senha incorretos");
-        console.log(e);
+        console.error(e);
       });
   }
 
-  // Função deslogar
+  /**
+   * Função para deslogar o usuário.
+   * Remove os dados do usuário localmente e no Firebase Authentication.
+   */
   async function signOutUser() {
-    await signOut(auth);
-    localStorage.removeItem("@admin");
-    setUser(null);
-    navigate("/");
+    await signOut(auth); // Desloga do Firebase
+    localStorage.removeItem("@admin"); // Remove dados salvos
+    setUser(null); // Reseta o estado do usuário
+    navigate("/"); // Redireciona para a página inicial
   }
 
-  // função de registrar loja
+  /**
+   * Função para registrar uma loja no Firestore.
+   * Verifica a validade dos dados e salva o documento na base de dados.
+   * @param {object} data - Dados da loja a ser registrada.
+   */
+
   async function setRegister(data) {
     // Validação dos campos obrigatórios
-    if (
+
+    const valid =
       !data.complexo ||
       !data.tipo ||
       !data.numero ||
-      (!data.piso && !data.andar) || // Garantir que pelo menos um (piso ou andar) esteja presente
+      (!data.piso && !data.andar) || // Ao menos um dos dois deve ser preenchido
       !data.localRelogio ||
       !data.relogio ||
-      !formatoDate
-    ) {
-      console.error("Erro: Campos obrigatórios ausentes!", data);
+      !formatoDate;
+
+    if (valid) {
       toast.error("Preencha todos os campos obrigatórios.");
+      console.error("Erro: Campos obrigatórios ausentes!", data);
       return;
     }
 
-    const uniqueId = `${data.complexo}-${data.tipo}`;
-    let id = "";
-    if (data.complexo === "shopping") {
-      id = `${data.piso}-${data.numero}`;
-    } else {
-      id = `${data.andar}-${data.numero}`;
-    }
-
-    if (!db) {
-      console.error("A instância do Firestore (db) está indefinida!");
-      return;
-    }
-
-    if (!uniqueId || !id) {
-      console.error("Erro: uniqueId ou id estão indefinidos!", {
-        uniqueId,
-        id,
-      });
-      return;
-    }
+    const uniqueId = `${data.complexo}-${data.tipo}`; // Identificador único por tipo e complexo
+    const id =
+      data.complexo === "shopping"
+        ? `${data.piso}-${data.numero}` // Gera ID para shopping
+        : `${data.andar}-${data.numero}`; // Gera ID para outros complexos
 
     try {
       await setDoc(doc(db, uniqueId, id), {
+        id,
         complexo: data.complexo,
         tipo: data.tipo,
         nomeLoja: data.nomeLoja || "N/A",
         piso: data.piso || "N/A",
         numero: data.numero,
-        numeroLoja: data.piso
-          ? `${data.piso}-${data.numero}`
-          : `${data.andar}-${data.numero}`,
         medicao: data.medicao || 0,
         ultimaMedicao: data.medicao || 0,
-        localRelogio: data.localRelogio || "N/A",
         andar: data.andar || "N/A",
-        andarRelogio: data.andarRelogio || "N/A",
+        localRelogio: data.andar ? data.andarRelogio : data.localRelogio,
         relogio: data.relogio,
+        descricao: data.descricao || "N/A",
+        //  photo: data.photo || "N/A",
         data: formatoDate,
       });
       toast.success("Loja cadastrada com sucesso!");
       setTimeout(() => {
-        window.location.reload();
+        window.location.reload(); // Atualiza a página após cadastro
       }, 2000);
     } catch (e) {
-      console.error("Erro ao salvar no Firestore:", e);
       toast.error("Ops, erro ao cadastrar a loja.");
+      console.error("Erro ao salvar no Firestore:", e);
     }
   }
 
-  // funcao Get medicao indivudual
+  /**
+   * Função para obter os dados de medição de uma loja específica.
+   * @param {string} idURL - ID do shopping.
+   * @param {string} buscaId - ID da loja.
+   */
   async function getInfo(idURL, buscaId) {
     const idShopping = `shopping-${idURL}`;
     const docRef = doc(db, idShopping, buscaId);
 
-    await getDoc(docRef)
-      .then((snapshot) => {
-        const data = snapshot.data();
-        setListaEnergia(data);
-      })
-      .catch((e) => console.log(e));
+    try {
+      const snapshot = await getDoc(docRef);
+      const data = snapshot.data();
+      setListaEnergia(data); // Define os dados da loja no estado
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  // Get das mediçoes do shopping
-  async function getShop(idURL) {
-    const idShopping = `shopping-${idURL}`;
+  /**
+   * Função para listar medições de todas as lojas de um shopping.
+   * @param {string} idURL - ID do shopping.
+   * @param {string} compUrl - Tipo de complexo ("shopping" ou outro).
+   */
+  async function getShop(idURL, compUrl) {
+    const idShopping = `${compUrl}-${idURL}`;
     const docRef = collection(db, idShopping);
 
-    await getDocs(docRef)
-      .then((snapshot) => {
-        let lista = [];
-        snapshot.forEach((doc) => {
-          lista.push({
-            id: doc.id,
-            complexo: doc.data().complexo,
-            tipo: doc.data().tipo,
-            nomeLoja: doc.data().nomeLoja,
-            piso: doc.data().piso,
-            numero: doc.data().numero,
-            numeroLoja: doc.data().numeroLoja,
-            medicao: doc.data().medicao,
-            localRelogio: doc.data().localRelogio,
-            andar: doc.data().andar,
-            andarRelogio: doc.data().andarRelogio,
-            relogio: doc.data().relogio,
-            ultimaMedicao: doc.data().ultimaMedicao,
-            data: doc.data().data,
-          });
+    try {
+      const snapshot = await getDocs(docRef);
+      const lista = [];
+
+      snapshot.forEach((doc) => {
+        lista.push({
+          id: doc.id,
+          ...doc.data(), // Desestrutura os dados do documento
         });
-        setListaEnergia(lista);
-      })
-      .catch((e) => console.log(e));
+      });
+
+      setListaEnergia(lista); // Atualiza a lista de medições no estado
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  // Get das medicoes GreenTower
-  async function getTorre(idURL) {
-    const idShopping = `green-tower-${idURL}`;
-    const docRef = collection(db, idShopping);
-
-    await getDocs(docRef)
-      .then((snapshot) => {
-        let lista = [];
-        snapshot.forEach((doc) => {
-          lista.push({
-            id: doc.id,
-            complexo: doc.data().complexo,
-            tipo: doc.data().tipo,
-            loja: doc.data().loja,
-            piso: doc.data().piso,
-            medicao: doc.data().medicao,
-            ultimaMedicao: doc.data().ultimaMedicao,
-          });
-        });
-        setListaEnergia(lista);
-      })
-      .catch((e) => console.log(e));
-  }
-
+  // Provedor do contexto para os componentes filhos
   return (
     <AuthContext.Provider
       value={{
@@ -225,7 +203,6 @@ function AuthProvider({ children }) {
         setRegister,
         getShop,
         listaEnergia,
-        getTorre,
         getInfo,
       }}
     >

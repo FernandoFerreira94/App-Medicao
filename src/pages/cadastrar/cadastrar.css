@@ -4,3 +4,9 @@
     font-weight: 400;
     font-size: 13px;
 }
+
+.cadastrar textarea{
+    width: 70%;
+    height: 70px;
+    padding: 5px;
+}

@@ -1,42 +1,67 @@
-.modal{
+/* Estilo principal do modal */
+.modal {
     width: 80%;
     max-width: 700px;
     margin: 70px auto;
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     justify-content: center;
     gap: 15px;
     position: relative;
     border-radius: 5px;
     z-index: 99;
-    padding:   60px ;
-    box-shadow: 0 0 30px rgb(0, 0, 0,0.9);
-
-    strong{
-        font-size: 17px;
-        }
-        
-        i{
-            font-size: 15px;
-        }
-      
+    padding: 60px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
 }
 
-.close{
+.modal strong {
+    font-size: 17px;
+}
+
+.modal i {
+    font-size: 15px;
+}
+
+/* Botão para fechar o modal */
+.close {
     position: absolute;
-    top: 50px;
-    right: 50px;
+    top: 30px;
+    right: 30px;
     color: red;
     font-size: 25px;
-    transition: all 0.5s;
-    &:hover{
-       transform: scale(1.1);
+    transition: transform 0.5s ease;
+}
+
+.close:hover {
+    transform: scale(1.1);
+}
+
+/* Estilo para inputs desabilitados no formulário */
+.form-Edit input[disabled] {
+    cursor: not-allowed;
+}
+
+.photo-Modal{
+    width: 200px;
+    height: 150px;
+}
+
+
+@media screen and (max-width: 700px) {
+    .modal{
+        width: 95%;
+        padding: 80px 20px;
+     
+    }
+
+    .close {
+        left: 10px ;
+        font-size: 28px;
+    }
+
+    input{
     }
 }
 
-.form-Edit input[disabled] {
-    cursor: not-allowed;
-  }
-
-  
+@media screen and (max-width: 500px) {}

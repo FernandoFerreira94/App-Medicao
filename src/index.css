@@ -75,3 +75,52 @@ svg{
 input, select{
     margin-left: 5px;
 }
+
+@media screen and (max-width: 900px) {
+    .content{
+        width: 100%;
+        padding: 40px 10px;
+    }
+}
+
+
+@media screen and (max-width: 700px) {
+    .content{
+       display: flex;
+       flex-direction: column;
+    }
+    table{
+        border: 0;
+    }
+
+ 
+
+    table thead{
+        border: none;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    table tr{
+        display: block;
+        margin-bottom: 1em;
+
+    }
+
+    table td{
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: 14px;
+        text-align: right;
+        padding: 8px;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}

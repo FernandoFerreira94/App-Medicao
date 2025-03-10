@@ -8,7 +8,16 @@
     align-items: center;
     justify-content: center;
    
+    @media screen and (max-width: 700px) {
+        width: 70%;
+        font-size: 18px;    
+        
+        img{
+            width: 200px;
+        }
 
+
+     }
 
      .signIn-form{
          display: flex;
@@ -17,6 +26,7 @@
          flex-direction: column;
          margin-top: 20px;
          gap: 10px;
+       
         }
     label{
         font-weight: bolder;
@@ -42,3 +52,17 @@
         }
     }
  }
+
+ @media screen and (max-width: 700px) {
+    .signIn-div{
+        width: 90%;
+        font-size: 18px;  
+    }
+    
+    img{
+        width: 200px;
+    }
+    
+
+
+}

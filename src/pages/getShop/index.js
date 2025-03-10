@@ -17,6 +17,8 @@ export default function InfoShop() {
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [buscaId, setBuscaId] = useState("");
+  const [buscaLista, setBuscaLista] = useState("");
+  const [listaFiltrada, setListaFiltrada] = useState([]);
 
   // Recupera parâmetros da URL e dados do contexto
   const { idShop } = useParams(); // ID do shopping
@@ -35,6 +37,21 @@ export default function InfoShop() {
     getShop(idShop, compUrl); // Chama função para buscar os dados do shopping
   }, [idShop, getShop, compUrl]);
 
+  // Atualiza a lista filtrada sempre que a busca ou a lista original mudar
+  useEffect(() => {
+    if (buscaLista.trim() === "") {
+      setListaFiltrada(listaEnergia);
+    } else {
+      setListaFiltrada(
+        listaEnergia.filter(
+          (loja) =>
+            loja.nomeLoja.toLowerCase().includes(buscaLista.toLowerCase()) ||
+            loja.id.toLowerCase().includes(buscaLista.toLowerCase()) ||
+            loja.relogio.includes(buscaLista)
+        )
+      );
+    }
+  }, [buscaLista, listaEnergia]);
   /**
    * Abre o modal de detalhes da loja específica.
    * @param {string} id - ID da loja.
@@ -54,48 +71,51 @@ export default function InfoShop() {
     setShowModalEdit(true); // Define que o modal será de edição
   }
 
-  function handleBusca() {}
-
   // Renderização do componente
   return (
     <>
-      {/* Cabeçalho */}
       <Header />
-      {/* Exibição condicional: oculta os detalhes enquanto o modal está aberto */}
       {!showModal && (
         <>
-          <Title name={titulo} /> {/* Título dinâmico com o ID do shopping */}
+          <Title name={titulo} />
+          {/* Div de busca */}
           <div className="content">
+            <div className="serch-content">
+              <label>Buscar loja:</label>
+              <input
+                type="text"
+                placeholder="Nome, ID ou N relogio..."
+                value={buscaLista}
+                onChange={(e) => setBuscaLista(e.target.value)} // Atualiza o valor do input
+              />
+            </div>
             <table>
               <thead>
                 <tr>
                   <th scope="col">Loja</th>
-                  <th scope="col">EUD</th>
+                  <th scope="col">ID</th>
                   <th scope="col">Local relogio</th>
-                  <th scope="col"> N relogio</th>
+                  <th scope="col">N relogio</th>
                   <th scope="col">Medição</th>
                   <th scope="col">Data ult atualização</th>
                   <th scope="col">Detalhes</th>
                 </tr>
               </thead>
               <tbody>
-                {/* Renderiza a lista de lojas ou uma mensagem caso não existam */}
-                {listaEnergia && listaEnergia.length > 0 ? (
-                  listaEnergia.map((loja) => (
+                {listaFiltrada && listaFiltrada.length > 0 ? (
+                  listaFiltrada.map((loja) => (
                     <tr key={loja.id}>
                       <td data-label="Loja">{loja.nomeLoja}</td>
-                      <td data-label="Ued">{loja.id}</td>
+                      <td data-label="ID">{loja.id}</td>
                       <td data-label="Local Relogio">{loja.localRelogio}</td>
                       <td data-label="Medição">{loja.relogio}</td>
                       <td data-label="Medição">{loja.medicao}</td>
                       <td data-label="Data ult atualização">{loja.data}</td>
                       <td data-label="Detalhes">
-                        {/* Botão de visualização de detalhes */}
                         <FaInfoCircle
                           onClick={() => handleShowModal(loja.id)}
                           color="rgb(78, 46, 145)"
                         />
-                        {/* Botão de edição */}
                         <FaEdit
                           onClick={() => handleShowModalEdit(loja.id)}
                           color="rgb(239, 48, 109)"
@@ -105,7 +125,7 @@ export default function InfoShop() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4">Nenhuma loja encontrada</td>
+                    <td colSpan="7">Nenhuma loja encontrada</td>
                   </tr>
                 )}
               </tbody>
@@ -113,18 +133,15 @@ export default function InfoShop() {
           </div>
         </>
       )}
-
-      {/* Renderização do modal */}
       {showModal && (
         <Modal
-          buscaId={buscaId} // ID da loja a ser exibida
-          idShop={idShop} // ID do shopping
+          buscaId={buscaId}
+          idShop={idShop}
           close={() => {
-            // Fecha o modal e redefine o estado de edição
             setShowModal(false);
             setShowModalEdit(false);
           }}
-          modalEdit={showModalEdit} // Indica se é um modal de edição
+          modalEdit={showModalEdit}
         />
       )}
     </>

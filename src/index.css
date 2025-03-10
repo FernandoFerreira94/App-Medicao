@@ -2,9 +2,10 @@
     width: 70%;
     margin: 70px auto;
     display: flex;
-    justify-content: start;
-    align-items: center;
+    justify-content: center;
+    align-items: start;
     padding: 40px;
+    flex-direction: column;
 }
 
 .cadastrar{
@@ -74,6 +75,26 @@ svg{
 
 input, select{
     margin-left: 5px;
+}
+
+.serch-content{
+   width: 100%;
+    margin-bottom: 50px;
+    label{
+        font-weight: bold;
+        font-size: 17px;
+    }
+
+    input{
+        margin-left: 10px;
+        width: 40%;
+        height: 30px;
+        padding: 5px;
+        border-radius: 5px;
+        border: none;
+        box-shadow: 0 5px 10px black;
+    }
+    
 }
 
 @media screen and (max-width: 900px) {

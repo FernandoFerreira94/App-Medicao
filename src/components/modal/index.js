@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { updateDoc, doc } from "firebase/firestore";
 import { useLocation } from "react-router-dom";
 
-import photoModal from "../../assets/logo_colinas.svg";
 import "./modal.css";
 import { db } from "../../services/firebaseConection";
 import { FaRegWindowClose } from "react-icons/fa";

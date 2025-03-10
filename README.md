@@ -1,30 +1,35 @@
 # App Medição
 
-Aplicativo para cadastro e gestão de mediçoes de energia e agua.
+Aplicativo para cadastro e gestão de medições de energia e água, com autenticação segura, interface elegante e funcionalidades completas para facilitar o monitoramento e registro.
 
-## Funcionalidades
+## 🚀 Funcionalidades
 
-- Página de Login de acesso.
-- Sistema de autenticação de usuário com Firebase Authentication
-- Cadastro e gestão de mediçoes de energia e agua
-- Route Private para assegurar a segurança da interface 
-- Redirecionamento para a página de login se o usuário não estiver autenticado
+- **Página de Login de Acesso**: Sistema de login com autenticação via Firebase Authentication, garantindo segurança no acesso dos usuários.
+- **Cadastro de Estabelecimentos**: Adicione dados das lojas para monitoramento das medições de energia e água.
+- **Gestão de Medições**: Registre e atualize medições de energia e água, com possibilidade de incluir fotos para validação das informações.
+- **Validação e Atualização de Medições**: Sistema de validação com imagens para assegurar a veracidade das informações.
+- **Visualização Detalhada**: Consulte as medições registradas de forma organizada e intuitiva.
+- **Segurança Avançada**: Utilização de rotas privadas (Private Routes) para proteger a interface e redirecionamento automático para a página de login caso o usuário não esteja autenticado.
 
-## Tecnologias Utilizadas
+## 🛠 Tecnologias Utilizadas
 
-- React
-- React Router
-- Context API
-- Firebase Authentication
-- Firebase Firestore
-- React Toastify
-- Styled Components
+O projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-## Instalação
+- **React**: Para a construção da interface do usuário.
+- **React Router**: Para gerenciamento de rotas.
+- **Context API**: Para gerenciamento de estado de forma centralizada.
+- **Firebase Authentication**: Para autenticação segura dos usuários.
+- **Firebase Firestore**: Para armazenamento de dados no backend.
+- **React Toastify**: Para notificações visuais.
+- **Styled Components**: Para estilização dinâmica e modular.
 
-Para rodar o projeto localmente, siga os seguintes passos:
+## 📦 Instalação e Configuração
 
-1. Clone o repositório:
+Siga os passos abaixo para executar o projeto localmente:
+
+1. **Clone o Repositório**
+
+   Clone o repositório do GitHub para sua máquina local:
 
    ```bash
-   git clone https://github.com/seu-usuario/app_chamados.git
+   git clone https://github.com/seu-usuario/app_medicao.git

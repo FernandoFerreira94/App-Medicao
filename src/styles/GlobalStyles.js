@@ -15,8 +15,6 @@ body {
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
     width: 100%;
-    height: 100dvh; /* Utiliza viewport dinâmica para altura */
-    margin-bottom: 100px
 }
 
 /* Links */

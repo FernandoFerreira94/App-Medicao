@@ -100,6 +100,7 @@ export default function Cadastrar() {
                   <option value="NT">NT</option>
                   <option value="QS">QS</option>
                   <option value="QT">QT</option>
+                  <option value="AE">AE</option>
                 </select>
                 {errors.piso && (
                   <small className="error">{errors.piso.message}</small>

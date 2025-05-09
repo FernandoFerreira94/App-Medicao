@@ -1,67 +1,60 @@
-.divLocal{
-    width: 30%;
-    height: 200px;
-    cursor: pointer;
-    border-radius: 5px;
-    box-shadow:rgba(0, 0, 0, 0.29) 0px 10px 29px -1px;
-    margin-top: 50px;
-    transition: all 0.3s ease-in-out;
-    border-radius: 5px;
-    &:hover{
-        transform: scale(1.05);
-    }
-    
-    h2{
-        margin-top: 10px;
-        text-align: center;
-    }
+.divLocal {
+  width: 30%;
+  height: 400px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.29) 0px 10px 29px -1px;
+  margin-top: 50px;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  h2 {
+    margin-top: 10px;
+    text-align: center;
+  }
 }
 
-.shop, .torre {
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-   
+.shop,
+.torre {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
 }
-.shop{
-    background: url("../../assets/shop.webp");
-    background-size: cover;
-    background-position: center;
-    
+.shop {
+  background: url("../../assets/shop.webp");
+  background-size: cover;
+  background-position: center;
 }
 
 .torre {
-    background: url("../../assets/torrer.jpeg");
-    background-size: cover;
-    background-position: center;
-
+  background: url("../../assets/torrer.jpeg");
+  background-size: cover;
+  background-position: center;
 }
 
 @media screen and (max-width: 1050) {
-    .divLocal{
-        width: 35%;
-    }
-
+  .divLocal {
+    width: 35%;
+  }
 }
 
 @media screen and (max-width: 800px) {
-    .divLocal{
-        width: 40%;
-    }
-
+  .divLocal {
+    width: 40%;
+  }
 }
 
 @media screen and (max-width: 700px) {
-    .divLocal{
-        width: 40%;
-    }
-
-    
-
+  .divLocal {
+    width: 40%;
+  }
 }
 
-
 @media screen and (max-width: 500px) {
-    .divLocal{
-        width: 70%;
-    }}
+  .divLocal {
+    width: 70%;
+  }
+}

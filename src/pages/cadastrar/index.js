@@ -81,7 +81,12 @@ export default function Cadastrar() {
                 <input
                   type="text"
                   placeholder="Digite o nome da loja"
-                  {...register("nomeLoja", { required: MSG_ERROR })}
+                  {...register("nomeLoja", {
+                    required: MSG_ERROR,
+                    onChange: (e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                    },
+                  })}
                 />
                 {errors.nomeLoja && (
                   <small className="error">{errors.nomeLoja.message}</small>

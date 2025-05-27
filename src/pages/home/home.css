@@ -7,6 +7,7 @@
   margin-top: 50px;
   transition: all 0.3s ease-in-out;
   border-radius: 5px;
+
   &:hover {
     transform: scale(1.05);
   }
@@ -55,6 +56,6 @@
 
 @media screen and (max-width: 500px) {
   .divLocal {
-    width: 70%;
+    width: 100%;
   }
 }

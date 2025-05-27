@@ -104,24 +104,26 @@ export default function InfoShop() {
               <tbody>
                 {listaFiltrada && listaFiltrada.length > 0 ? (
                   listaFiltrada.map((loja) => (
-                    <tr key={loja.id}>
-                      <td data-label="Loja">{loja.nomeLoja}</td>
-                      <td data-label="ID">{loja.id}</td>
-                      <td data-label="Local Relogio">{loja.localRelogio}</td>
-                      <td data-label="Medição">{loja.relogio}</td>
-                      <td data-label="Medição">{loja.medicao}</td>
-                      <td data-label="Data ult atualização">{loja.data}</td>
-                      <td data-label="Detalhes">
-                        <FaInfoCircle
-                          onClick={() => handleShowModal(loja.id)}
-                          color="rgb(78, 46, 145)"
-                        />
-                        <FaEdit
-                          onClick={() => handleShowModalEdit(loja.id)}
-                          color="rgb(239, 48, 109)"
-                        />
-                      </td>
-                    </tr>
+                    <>
+                      <tr key={loja.id}>
+                        <td data-label="Loja">{loja.nomeLoja}</td>
+                        <td data-label="ID">{loja.id}</td>
+                        <td data-label="Local Relogio">{loja.localRelogio}</td>
+                        <td data-label="Medição">{loja.relogio}</td>
+                        <td data-label="Medição">{loja.medicao}</td>
+                        <td data-label="Data ult atualização">{loja.data}</td>
+                        <td data-label="Detalhes">
+                          <FaInfoCircle
+                            onClick={() => handleShowModal(loja.id)}
+                            color="rgb(78, 46, 145)"
+                          />
+                          <FaEdit
+                            onClick={() => handleShowModalEdit(loja.id)}
+                            color="rgb(239, 48, 109)"
+                          />
+                        </td>
+                      </tr>
+                    </>
                   ))
                 ) : (
                   <tr>

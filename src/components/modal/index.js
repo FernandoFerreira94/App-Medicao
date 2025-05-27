@@ -145,6 +145,14 @@ export default function Modal({ close, idShop, buscaId, modalEdit }) {
                 <strong>Local do Relógio:</strong>{" "}
                 <i>{infoLoja.localRelogio}</i>
               </label>
+              {infoLoja.descricao && (
+                <>
+                  <label>
+                    <strong>Local: </strong>
+                    <i>{infoLoja.descricao}</i>
+                  </label>
+                </>
+              )}
               <label>
                 <strong>Número do Relógio:</strong> <i>{infoLoja.relogio}</i>
               </label>
